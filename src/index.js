@@ -64,21 +64,17 @@ function makeToy(toys){
       headers: {
         'Content-Type': 'application/json'
       }
-     }).then(r => r.json())
-
-     showNewToy(data)
+    }).then(r => r.json()).then(toy =>showNewToy(toy))
    }
 
-   function showNewToy(data){
+   function showNewToy(toy){
      fetch('http://localhost:3000/toys')
      .then(r => r.json())
      .then(toys => {
-     const toy = toys[data["id"] - 1]
-     console.log(toy)
      const collectionDiv = document.getElementById('toy-collection')
      const toyDiv = document.createElement('div')
      toyDiv.classList.add('card')
-     toyDiv.dataset.cardID = data["id"]
+     toyDiv.dataset.cardID = toy.id
 
      const toyName = document.createElement('h2')
      const toyLikes = document.createElement('p')
@@ -89,9 +85,9 @@ function makeToy(toys){
      toyButton.innerHTML = 'Like'
      toyButton.addEventListener('click', e => addLikes(toy))
 
-     toyName.innerHTML = data["name"]
-     toyLikes.innerHTML = data["likes"]
-     toyPic.src = data["image"]
+     toyName.innerHTML = toy.name
+     toyLikes.innerHTML = toy.likes
+     toyPic.src = toy.image
 
      toyDiv.append(toyName)
      toyDiv.append(toyPic)
