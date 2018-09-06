@@ -5,8 +5,7 @@ let addToy = false
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost:3000/toys')
-  .then(r => r.json())
+  ToyAdapter.getToys()
   .then(toys => makeToy(toys))
   }
 )
@@ -14,16 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
 function makeToy(toys){
   toys.forEach(toy => {
     const collectionDiv = document.getElementById('toy-collection')
+
     const toyDiv = document.createElement('div')
     toyDiv.classList.add('card')
     toyDiv.dataset.cardID = toy.id
+
     const toyName = document.createElement('h2')
     const toyLikes = document.createElement('p')
+
     const toyPic = document.createElement('img')
     toyPic.classList.add('toy-avatar')
+
     const toyButton = document.createElement('button')
     toyButton.classList.add('like-btn')
-    toyButton.innerHTML = 'Like'
+    toyButton.innerHTML = 'Like <3'
     toyButton.addEventListener('click', e => addLikes(toy))
 
     toyName.innerHTML = toy.name
@@ -57,7 +60,6 @@ function makeToy(toys){
 
 
   function addNewToy(data) {
-
     fetch('http://localhost:3000/toys', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -104,13 +106,7 @@ function makeToy(toys){
        likes: toy.likes
      }
 
-     fetch('http://localhost:3000/toys/' + toy.id, {
-       method: 'PATCH',
-       body: JSON.stringify(data),
-       headers: {
-         'Content-Type': 'application/json'
-       }
-      }).then(r => r.json()).then(r => console.log(r))
+     ToyAdapter.editToy(toy.id, data)
 
    }
 
